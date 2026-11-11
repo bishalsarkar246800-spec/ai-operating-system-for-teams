@@ -19,3 +19,4 @@ class Workspace(Base):
     events = relationship("WorkspaceEvent", back_populates="workspace", cascade="all, delete-orphan")
     actions = relationship("AgentAction", back_populates="workspace", cascade="all, delete-orphan")
     audit_logs = relationship("AuditLog", back_populates="workspace", cascade="all, delete-orphan")
+

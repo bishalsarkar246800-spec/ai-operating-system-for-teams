@@ -72,3 +72,4 @@ async def generate_embedding(text: str) -> List[float]:
             pass
 
     return text_to_dense_vector(text)
+

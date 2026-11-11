@@ -245,3 +245,4 @@ class ActionService:
             "applied_changes": {},
             "message": f"Action {action.title} dismissed."
         }
+

@@ -206,3 +206,4 @@ class BriefDecomposer:
             )
 
         return tasks, dependencies
+

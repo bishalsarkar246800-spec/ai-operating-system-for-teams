@@ -95,3 +95,4 @@ async def decompose_brief(
         total_tasks=len(extracted_tasks),
         critical_path_duration_days=graph_state.metrics.critical_path_duration_days
     )
+

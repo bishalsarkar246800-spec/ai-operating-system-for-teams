@@ -138,3 +138,4 @@ export const RightPanel: React.FC<RightPanelProps> = ({
     </aside>
   );
 };
+

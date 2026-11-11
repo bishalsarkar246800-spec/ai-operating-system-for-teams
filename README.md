@@ -177,3 +177,4 @@ GEMINI_API_KEY=your_key_here  # Optional
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_WS_URL=ws://localhost:8000
 ```
+

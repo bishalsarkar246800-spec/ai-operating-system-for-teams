@@ -182,3 +182,4 @@ class GraphService:
             {"type": "graph_updated", "data": fresh_state.model_dump()}
         )
         return fresh_state
+

@@ -16,3 +16,4 @@ It operates as an intelligent coordination plane:
 - **Persistence & Vector Store**: PostgreSQL with `pgvector` (with automatic SQLite fallback for zero-dependency local execution).
 - **Pub/Sub & Real-time**: WebSockets connection manager + Redis pub/sub.
 - **AI/LLM Engine**: Structured JSON decomposition & event analysis with fallback heuristic semantic parsing.
+

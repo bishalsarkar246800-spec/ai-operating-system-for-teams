@@ -42,3 +42,4 @@ class EventItem(BaseModel):
     delay_impact_days: int
     severity: str
     created_at: datetime.datetime
+

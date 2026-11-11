@@ -24,3 +24,4 @@
 - **React Flow Canvas**: Custom nodes with domain badges, status color coding (Green: On Track, Yellow: At Risk, Red: Blocked, Blue: Done), animated risk edges.
 - **Top Metrics Banner**: Overall health status, completion percentage, total active risk count, and critical path timeline.
 - **Interactive Side Panel**: Real-time team chat simulator to trigger live blocker cascades, plus Action Approval Drawer.
+

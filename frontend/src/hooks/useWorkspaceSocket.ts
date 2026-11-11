@@ -74,3 +74,4 @@ export function useWorkspaceSocket(
 
   return { isConnected, lastMessage, sendMessage };
 }
+

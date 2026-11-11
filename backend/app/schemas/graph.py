@@ -64,3 +64,4 @@ class NodeUpdatePayload(BaseModel):
     cumulative_delay_days: Optional[int] = None
     delay_reason: Optional[str] = None
     owner: Optional[str] = None
+

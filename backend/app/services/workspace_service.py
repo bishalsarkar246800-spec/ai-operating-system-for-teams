@@ -198,3 +198,4 @@ class WorkspaceService:
         await db.commit()
         logger.info(f"Seeded workspace {workspace_id} with 8 tasks and 7 dependencies.")
         return workspace
+

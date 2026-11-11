@@ -132,3 +132,4 @@ export const DecomposeModal: React.FC<DecomposeModalProps> = ({
     </div>
   );
 };
+

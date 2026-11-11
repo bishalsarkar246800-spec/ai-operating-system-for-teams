@@ -53,3 +53,4 @@ export const Legend: React.FC = () => {
     </div>
   );
 };
+

@@ -33,3 +33,4 @@ class DecomposeResponse(BaseModel):
     edges: List[ReactFlowEdge]
     total_tasks: int
     critical_path_duration_days: int
+

@@ -36,3 +36,4 @@ class AuditLog(Base):
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
 
     workspace = relationship("Workspace", back_populates="audit_logs")
+

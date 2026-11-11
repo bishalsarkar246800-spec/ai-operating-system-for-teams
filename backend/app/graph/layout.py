@@ -42,3 +42,4 @@ def compute_dag_layout(
             positions[node_id] = (float(x), float(y))
 
     return positions
+

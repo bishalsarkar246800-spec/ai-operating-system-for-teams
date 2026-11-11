@@ -21,3 +21,4 @@ class WorkspaceEvent(Base):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     workspace = relationship("Workspace", back_populates="events")
+

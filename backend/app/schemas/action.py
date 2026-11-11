@@ -39,3 +39,4 @@ class AuditLogItem(BaseModel):
     decision: str
     details: Optional[str]
     timestamp: datetime.datetime
+

@@ -56,3 +56,4 @@ async def init_db():
         # Create all tables
         await conn.run_sync(Base.metadata.create_all)
         logger.info("Database schemas initialized.")
+
