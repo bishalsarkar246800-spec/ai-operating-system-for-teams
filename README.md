@@ -66,14 +66,41 @@ flowchart TD
 - Proposes structured `AgentAction` drafts (e.g., *"Shift Mobile Launch by 3 days"*, *"Notify Design Lead of blocker"*).
 - Exposes `/api/actions/{id}/approve` and `/api/actions/{id}/reject` with full audit logs tracking actor, timestamp, and delta.
 
-### 5. Neo-Brutalist Modern DevTool UI
+### 5. Neo-Brutalist Modern DevTool UI & Dual Views
 - High-contrast, sharp visual canvas with custom `@xyflow/react` task nodes.
+- **Dual Visual Modes**:
+  - 🗺 **DAG Canvas**: Interactive node-graph canvas with zoom, pan, minimap, domain filter pills (Engineering, Design, Product, Marketing), and critical-path highlighting.
+  - 📊 **Timeline Schedule**: Horizontal Gantt-style schedule view computing task bounding dates and dependency lags.
+- **Task Inspector**: Click any task card to open the detailed inspector showing prerequisites, downstream deliverables, owner, duration, delay diagnostics, and manual status/delay overrides.
+- **Multi-Tenant Workspace Selector**: Switch between different projects or create new workspaces with isolated graphs and activity streams.
 - Color-coded status badges:
   - 🟢 **On Track** (Green)
   - 🟡 **At Risk** (Yellow / Amber)
   - 🔴 **Blocked** (Red)
   - 🔵 **Completed** (Blue)
 - Interactive mock chat simulator allowing live injection of delays and blockers to observe real-time visual cascades.
+
+---
+
+## 🧪 Testing & Verification
+
+The platform includes full automated test suites covering graph theory algorithms, end-to-end integration flows, and multi-tenant security isolation.
+
+### Run Backend Tests
+```bash
+cd backend
+.venv/bin/python3 -m unittest backend/tests/test_engine.py backend/tests/test_graph_engine.py backend/tests/test_security_isolation.py
+```
+- **`test_graph_engine.py`**: Tests acyclicity, cycle detection, critical path calculation via topological sort, descendant risk cascading, and 2D layout generation.
+- **`test_engine.py`**: End-to-end verification across Modules A through D.
+- **`test_security_isolation.py`**: Verifies multi-tenant boundary isolation, SQL injection resistance, cross-tenant action gating, and event containment.
+
+### Run Frontend Static Type Verification
+```bash
+cd frontend
+npm test
+```
+Verifies strict TypeScript typing across all React Flow nodes, modals, hooks, and views without errors.
 
 ---
 
@@ -149,8 +176,11 @@ Frontend UI will be accessible at: `http://localhost:3000`
 |---|---|---|
 | `POST` | `/api/decompose` | Ingests raw brief markdown and returns nodes + edges |
 | `POST` | `/api/events/ingest` | Ingests team chat / event and triggers risk propagation |
+| `GET` | `/api/workspaces` | Lists all active workspaces with task counts |
+| `POST` | `/api/workspaces` | Creates a new workspace with custom ID and name |
 | `GET` | `/api/graph/{workspace_id}` | Fetches current DAG state, nodes, edges, and metrics |
-| `POST` | `/api/graph/{workspace_id}/node` | Manually updates task status or parameters |
+| `POST` | `/api/graph/{workspace_id}/task` | Manually creates a task deliverable with optional dependency |
+| `POST` | `/api/graph/{workspace_id}/node/{node_id}` | Manually updates task status or parameters |
 | `GET` | `/api/actions` | Lists pending and audited agent actions |
 | `POST` | `/api/actions/{id}/approve` | Approves agent recommendation and updates graph |
 | `POST` | `/api/actions/{id}/reject` | Dismisses agent recommendation |
@@ -168,9 +198,28 @@ HOST=0.0.0.0
 DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/ai_teams_os
 # If DATABASE_URL is not provided or postgres is offline, defaults seamlessly to sqlite+aiosqlite:///./ai_teams.db
 REDIS_URL=redis://localhost:6379/0
+AIR_GAPPED_MODE=false         # Set to true for 100% on-premise air-gapped zero external egress
 OPENAI_API_KEY=your_key_here  # Optional; heuristic fallback operates with full fidelity
 GEMINI_API_KEY=your_key_here  # Optional
 ```
+
+---
+
+## 🛡️ Privacy & Zero Data Leakage Architecture
+
+For enterprise teams operating with confidential product specs, source code, or internal roadmaps:
+
+1. **Air-Gapped & Offline Guarantee**:
+   - Setting `AIR_GAPPED_MODE=true` ensures **zero bytes** of raw briefs, events, or deliverables leave your local network.
+   - Built-in deterministic 128-dimensional n-gram feature hashing runs locally for semantic embedding calculation without calling external APIs.
+   - Heuristic DAG parser decomposes unstructured markdown briefs directly on the server with zero third-party telemetry.
+2. **Multi-Tenant Workspace Isolation**:
+   - Every workspace is strictly isolated with non-colliding task prefixing (`{PREFIX}-TASK-XX`) and scoped database queries.
+   - WebSocket broadcast channels are segmented per workspace ID; clients never receive real-time streams of other projects or tenants.
+3. **Defense-in-Depth HTTP Headers**:
+   - API middleware automatically enforces strict protection headers: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `X-XSS-Protection: 1; mode=block`, and `Referrer-Policy: strict-origin-when-cross-origin`.
+4. **Human-in-the-Loop Gateway**:
+   - Agents never possess autonomous write privileges to mutate critical deadlines or milestone baselines without explicit operator approval and audit logging.
 
 ### Frontend (`frontend/.env.local`)
 ```env

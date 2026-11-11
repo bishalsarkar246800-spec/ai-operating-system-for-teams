@@ -55,8 +55,8 @@ async def generate_embedding(text: str) -> List[float]:
     Async embedding generator. Attempts remote provider if configured,
     falling back reliably to deterministic vectorizer.
     """
-    # If OpenAI API Key is configured and accessible
-    if settings.OPENAI_API_KEY:
+    # If OpenAI API Key is configured and air-gapped privacy mode is off
+    if settings.OPENAI_API_KEY and not settings.AIR_GAPPED_MODE:
         try:
             import httpx
             async with httpx.AsyncClient(timeout=5.0) as client:

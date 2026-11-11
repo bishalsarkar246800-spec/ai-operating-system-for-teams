@@ -18,8 +18,8 @@ class BriefDecomposer:
         brief_text: str,
         workspace_id: str
     ) -> Tuple[List[ExtractedTask], List[ExtractedDependency]]:
-        # If OpenAI API Key is present, attempt remote structured LLM decomposition
-        if settings.OPENAI_API_KEY:
+        # If OpenAI API Key is present and Air-Gapped Mode is disabled, attempt remote LLM decomposition
+        if settings.OPENAI_API_KEY and not settings.AIR_GAPPED_MODE:
             try:
                 import httpx
                 system_prompt = (
@@ -53,10 +53,10 @@ class BriefDecomposer:
                 pass
 
         # Intelligent heuristic / pattern-based parser for offline / zero-dependency execution
-        return cls._heuristic_decompose(brief_text)
+        return cls._heuristic_decompose(brief_text, workspace_id)
 
     @classmethod
-    def _heuristic_decompose(cls, text: str) -> Tuple[List[ExtractedTask], List[ExtractedDependency]]:
+    def _heuristic_decompose(cls, text: str, workspace_id: str = "default") -> Tuple[List[ExtractedTask], List[ExtractedDependency]]:
         tasks: List[ExtractedTask] = []
         dependencies: List[ExtractedDependency] = []
 
@@ -64,6 +64,10 @@ class BriefDecomposer:
         
         current_domain = "Engineering"
         task_counter = 1
+        import hashlib
+        short_hash = hashlib.md5(workspace_id.encode()).hexdigest()[:4].upper()
+        clean = "".join(c for c in workspace_id if c.isalnum())[:3].upper() or "WS"
+        prefix = f"{clean}{short_hash}" if workspace_id != "apex-launch" else "TASK"
 
         # Domain keywords mapping
         domain_keywords = {
@@ -118,7 +122,7 @@ class BriefDecomposer:
 
         # Convert to ExtractedTask
         for idx, (title, assigned_domain) in enumerate(raw_items[:12]):
-            task_id = f"TASK-{task_counter:02d}"
+            task_id = f"{prefix}-TASK-{task_counter:02d}"
             task_counter += 1
 
             # Infer domain from title if default

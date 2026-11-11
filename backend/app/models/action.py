@@ -18,7 +18,7 @@ class AgentAction(Base):
     impact_summary = Column(Text, nullable=True)
     proposed_payload = Column(Text, nullable=True)  # JSON formatted payload for execution
     
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
     resolved_at = Column(DateTime, nullable=True)
 
     workspace = relationship("Workspace", back_populates="actions")
@@ -33,7 +33,7 @@ class AuditLog(Base):
     actor = Column(String, default="Human Operator")
     decision = Column(String, nullable=False)  # approved, rejected, system_init
     details = Column(Text, nullable=True)     # JSON description of the delta
-    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+    timestamp = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
     workspace = relationship("Workspace", back_populates="audit_logs")
 

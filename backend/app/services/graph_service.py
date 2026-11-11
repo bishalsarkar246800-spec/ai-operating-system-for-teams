@@ -36,7 +36,13 @@ class GraphService:
         G = GraphEngine.build_digraph(tasks, dependencies)
         is_dag, cycles = GraphEngine.check_cycles(G)
         critical_path_nodes, _ = GraphEngine.calculate_critical_path(G)
-        metrics = GraphEngine.compute_metrics(G, workspace_id, "Project Workspace")
+        # Fetch workspace name
+        from app.models.workspace import Workspace
+        ws_res = await db.execute(select(Workspace).where(Workspace.id == workspace_id))
+        ws_obj = ws_res.scalar_one_or_none()
+        ws_name = ws_obj.name if ws_obj else "Project Workspace"
+
+        metrics = GraphEngine.compute_metrics(G, workspace_id, ws_name)
 
         # Count pending actions
         actions_res = await db.execute(

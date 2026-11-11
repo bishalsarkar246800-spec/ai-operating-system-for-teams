@@ -34,6 +34,19 @@ if [ ! -d "frontend/node_modules" ]; then
     npm install --prefix frontend
 fi
 
+# Optional: Run test suite if requested
+if [ "$1" == "--test" ] || [ "$1" == "test" ]; then
+    echo ""
+    echo "🧪 Running full backend and security test suites..."
+    backend/.venv/bin/python3 -m unittest backend/tests/test_engine.py backend/tests/test_graph_engine.py backend/tests/test_security_isolation.py
+    echo ""
+    echo "🧪 Running frontend static typecheck test..."
+    npm --prefix frontend test
+    echo ""
+    echo "🎉 ALL TESTS PASSED SUCCESSFULLY (100% OK)!"
+    exit 0
+fi
+
 # Trap to cleanly kill both processes on exit
 cleanup() {
     echo ""

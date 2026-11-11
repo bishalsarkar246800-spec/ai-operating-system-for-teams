@@ -54,10 +54,20 @@ class WorkspaceService:
         
         await db.commit()
 
-        # Define 8 rich cross-functional tasks
+        # Define 8 rich cross-functional tasks with workspace-scoped IDs
+        import hashlib
+        short_hash = hashlib.md5(workspace_id.encode()).hexdigest()[:4].upper()
+        clean = "".join(c for c in workspace_id if c.isalnum())[:3].upper() or "WS"
+        prefix = f"{clean}{short_hash}"
+
+        id_map = {}
+        for num in range(1, 9):
+            raw_id = f"TASK-{num:02d}"
+            id_map[raw_id] = raw_id if workspace_id == "apex-launch" else f"{prefix}-TASK-{num:02d}"
+
         sample_tasks = [
             {
-                "id": "TASK-01",
+                "id": id_map["TASK-01"],
                 "title": "Database Schema & pgvector Migration",
                 "description": "Establish multi-tenant relational schemas and semantic indexing tables.",
                 "domain": "Engineering",
@@ -69,7 +79,7 @@ class WorkspaceService:
                 "position_y": 80.0,
             },
             {
-                "id": "TASK-02",
+                "id": id_map["TASK-02"],
                 "title": "Design System V2 & Canvas Spec",
                 "description": "Finalize Neo-Brutalist typography, tokens, and React Flow node templates.",
                 "domain": "Design",
@@ -81,7 +91,7 @@ class WorkspaceService:
                 "position_y": 260.0,
             },
             {
-                "id": "TASK-03",
+                "id": id_map["TASK-03"],
                 "title": "Auth0 & SSO Provider Migration",
                 "description": "Transition authentication gateway to support enterprise SAML and OAuth.",
                 "domain": "Engineering",
@@ -93,7 +103,7 @@ class WorkspaceService:
                 "position_y": 80.0,
             },
             {
-                "id": "TASK-04",
+                "id": id_map["TASK-04"],
                 "title": "Interactive React Flow Canvas",
                 "description": "Develop full-screen DAG node editor with real-time status color badges.",
                 "domain": "Engineering",
@@ -105,7 +115,7 @@ class WorkspaceService:
                 "position_y": 260.0,
             },
             {
-                "id": "TASK-05",
+                "id": id_map["TASK-05"],
                 "title": "Real-time Risk Propagation Engine",
                 "description": "Build NetworkX DAG traversal to cascade schedule delays to all descendants.",
                 "domain": "Engineering",
@@ -117,7 +127,7 @@ class WorkspaceService:
                 "position_y": 80.0,
             },
             {
-                "id": "TASK-06",
+                "id": id_map["TASK-06"],
                 "title": "Product Onboarding & Self-Serve Tour",
                 "description": "Guided walkthrough highlighting blocker cascading and approval queue.",
                 "domain": "Product",
@@ -129,7 +139,7 @@ class WorkspaceService:
                 "position_y": 260.0,
             },
             {
-                "id": "TASK-07",
+                "id": id_map["TASK-07"],
                 "title": "Mobile App Beta & Push Integration",
                 "description": "iOS & Android companion apps syncing live workspace events.",
                 "domain": "Engineering",
@@ -141,7 +151,7 @@ class WorkspaceService:
                 "position_y": 80.0,
             },
             {
-                "id": "TASK-08",
+                "id": id_map["TASK-08"],
                 "title": "Global Launch & Marketing Campaign",
                 "description": "Multi-channel announcement, Product Hunt launch, and press releases.",
                 "domain": "Marketing",
@@ -173,7 +183,7 @@ class WorkspaceService:
             )
             db.add(task_model)
 
-        # Define DAG dependencies
+        # Define DAG dependencies mapped with scoped task IDs
         sample_deps = [
             ("DEP-01", "TASK-01", "TASK-03", "Auth migration requires updated DB credentials and user schemas."),
             ("DEP-02", "TASK-02", "TASK-04", "Canvas components require Design System V2 UI tokens."),
@@ -184,12 +194,13 @@ class WorkspaceService:
             ("DEP-07", "TASK-07", "TASK-08", "Marketing launch requires public mobile app store approval."),
         ]
 
-        for dep_id, src, tgt, rationale in sample_deps:
+        dep_prefix = "DEP" if workspace_id == "apex-launch" else f"{prefix}-DEP"
+        for idx, (_, src, tgt, rationale) in enumerate(sample_deps, start=1):
             dep_model = TaskDependency(
-                id=dep_id,
+                id=f"{dep_prefix}-{idx:02d}",
                 workspace_id=workspace_id,
-                source_task_id=src,
-                target_task_id=tgt,
+                source_task_id=id_map[src],
+                target_task_id=id_map[tgt],
                 rationale=rationale,
                 impact_type="blocking"
             )

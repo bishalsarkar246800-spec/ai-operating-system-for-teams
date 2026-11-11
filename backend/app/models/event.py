@@ -18,7 +18,7 @@ class WorkspaceEvent(Base):
     severity = Column(String, default="info")       # info, warning, critical
     processed = Column(Boolean, default=True)
 
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
     workspace = relationship("Workspace", back_populates="events")
 

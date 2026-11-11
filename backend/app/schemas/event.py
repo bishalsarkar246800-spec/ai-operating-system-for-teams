@@ -4,9 +4,9 @@ import datetime
 
 
 class IngestEventRequest(BaseModel):
-    workspace_id: str
-    author: str = "Team Member"
-    text: str = Field(..., description="Unstructured update or chat text from team member")
+    workspace_id: str = Field(..., max_length=64, pattern=r"^[a-zA-Z0-9_-]+$")
+    author: str = Field("Team Member", max_length=100)
+    text: str = Field(..., max_length=2000, description="Unstructured update or chat text from team member")
 
 
 class AffectedNodeImpact(BaseModel):

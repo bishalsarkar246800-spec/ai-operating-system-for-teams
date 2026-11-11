@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     # AI / LLM APIs (optional; fallback engines are provided)
     OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY", None)
     GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY", None)
+    AIR_GAPPED_MODE: bool = os.getenv("AIR_GAPPED_MODE", "false").lower() in ("true", "1", "yes")
     
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
@@ -27,7 +28,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
-        "*"
+        "http://127.0.0.1:8000",
     ]
 
     class Config:

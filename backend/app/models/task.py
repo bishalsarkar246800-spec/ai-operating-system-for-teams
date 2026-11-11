@@ -21,8 +21,8 @@ class Task(Base):
     position_y = Column(Float, default=0.0)
     embedding = Column(Text, nullable=True)  # JSON-encoded float list for semantic lookup
 
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
+    updated_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc), onupdate=lambda: datetime.datetime.now(datetime.timezone.utc))
 
     workspace = relationship("Workspace", back_populates="tasks")
 
@@ -37,7 +37,7 @@ class TaskDependency(Base):
     rationale = Column(Text, nullable=True)
     impact_type = Column(String, default="blocking")  # blocking, non_blocking
 
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
     workspace = relationship("Workspace", back_populates="dependencies")
 

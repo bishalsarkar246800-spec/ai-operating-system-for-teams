@@ -136,7 +136,7 @@ class ActionService:
             return {"message": f"Action is already {action.status}", "status": action.status}
 
         action.status = "approved"
-        action.resolved_at = datetime.datetime.utcnow()
+        action.resolved_at = datetime.datetime.now(datetime.timezone.utc)
 
         applied_changes = {}
         if action.proposed_payload:
@@ -215,7 +215,7 @@ class ActionService:
             return {"message": f"Action is already {action.status}", "status": action.status}
 
         action.status = "rejected"
-        action.resolved_at = datetime.datetime.utcnow()
+        action.resolved_at = datetime.datetime.now(datetime.timezone.utc)
 
         audit = AuditLog(
             id=f"AUD-{str(uuid.uuid4())[:8].upper()}",
