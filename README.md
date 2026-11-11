@@ -1,5 +1,12 @@
 # AI Operating System for Teams (OS Teams)
 
+[![CI Suite](https://github.com/bishalsarkar246800-spec/ai-operating-system-for-teams/actions/workflows/ci.yml/badge.svg)](https://github.com/bishalsarkar246800-spec/ai-operating-system-for-teams/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Next.js 14](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org/)
+[![React Flow](https://img.shields.io/badge/@xyflow/react-12-ff0072.svg)](https://reactflow.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688.svg)](https://fastapi.tiangolo.com/)
+
 An intelligent, multi-tenant workspace platform that transforms unstructured product briefs and team chatter into directed dependency graphs, detects and propagates downstream schedule risks in real time, and executes human-approved agent remedial interventions.
 
 ---
