@@ -19,4 +19,4 @@
 - [x] Approval drawer with one-click Approve/Dismiss and live audit log
 - [x] Interactive Mock Chat feed allowing real-time event injection
 - [x] End-to-end WebSocket synchronization across canvas, chat, metrics, and actions
-- [x] Root startup orchestration script, Docker Compose verification, and full documentation
+- [x] Root startup orchestration script (`start.sh`), Docker Compose verification, and full documentation
